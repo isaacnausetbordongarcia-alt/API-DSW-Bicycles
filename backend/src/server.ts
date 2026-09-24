@@ -1,18 +1,24 @@
 import { app } from "./app";
 import { sequelize } from "./config/database";
 import { env } from "./config/env";
+import { defineAssociations } from "./models/associations";
 
 // Importamos los modelos para que Sequelize los registre.
 import "./modules/bicycles/bicycle.model";
+import "./modules/brands/brand.model";
 
 async function startServer() {
   try {
+
+    defineAssociations();
 
     await sequelize.authenticate();
 
     console.log("Conexión con MySQL establecida.");
 
-    await sequelize.sync();
+    await sequelize.sync({force: true}).then (() => {
+      console.log(" Datos sincronizados");
+    });
 
     console.log("Modelos sincronizados.");
 
