@@ -95,11 +95,12 @@ With the configuration above, the API runs at [http://localhost:3000/api](http:/
 
 ## Postman Links
 Here you can use this postman example link to try out the ends points.
-For brands:
+```bash
+# For brands:
 https://documenter.getpostman.com/view/54827853/2sBYB4L76P
-For bicycles:
+# For bicycles:
 https://documenter.getpostman.com/view/54827853/2sBYB4L7Ag
-
+```
 In the second terminal, start the frontend:
 
 ```bash
