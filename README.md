@@ -93,6 +93,14 @@ npm run dev
 
 With the configuration above, the API runs at [http://localhost:3000/api](http://localhost:3000/api), and the bicycle endpoint is [http://localhost:3000/api/bicycles](http://localhost:3000/api/bicycles).
 
+## Postman Links
+Here you can use this postman example link to try out the ends points.
+```bash
+# For brands:
+https://documenter.getpostman.com/view/54827853/2sBYB4L76P
+# For bicycles:
+https://documenter.getpostman.com/view/54827853/2sBYB4L7Ag
+```
 In the second terminal, start the frontend:
 
 ```bash
