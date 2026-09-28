@@ -30,7 +30,7 @@ export class BrandController {
 
       if (!brand) {
         res.status(404).json({
-          message: "Marca no encontrada",
+          message: "Brand not found",
         });
 
         return;
@@ -54,7 +54,7 @@ export class BrandController {
 
       if (!name || !brandId === undefined) {
         res.status(400).json({
-          message: "name es obligatorio",
+          message: "name is mandatory",
         });
 
         return;
@@ -85,7 +85,7 @@ export class BrandController {
 
       if (!brand) {
         res.status(404).json({
-          message: "Marca no encontrada",
+          message: "Brand not found",
         });
 
         return;
@@ -116,7 +116,7 @@ export class BrandController {
 
       if (!brand) {
         res.status(404).json({
-          message: "Marca no encontrada",
+          message: "Brand not found",
         });
 
         return;

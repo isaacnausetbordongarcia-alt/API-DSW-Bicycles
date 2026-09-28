@@ -3,7 +3,7 @@ import { sequelize } from "./config/database";
 import { env } from "./config/env";
 import { defineAssociations } from "./models/associations";
 
-// Importamos los modelos para que Sequelize los registre.
+// Import from the two models so we can use them here.
 import "./modules/bicycles/bicycle.model";
 import "./modules/brands/brand.model";
 
@@ -14,24 +14,24 @@ async function startServer() {
 
     await sequelize.authenticate();
 
-    console.log("Conexión con MySQL establecida.");
+    console.log("Connection to MySQL stablished.");
 
     await sequelize.sync({force: true}).then (() => {
-      console.log(" Datos sincronizados");
+      console.log(" Data synchronized");
     });
 
-    console.log("Modelos sincronizados.");
+    console.log("Models synchronized.");
 
     app.listen(env.PORT, () => {
       console.log(
-        `Servidor funcionando en http://localhost:${env.PORT}`
+        `Server working on http://localhost:${env.PORT}`
       );
     });
 
   } catch (error) {
 
     console.error(
-      "No se pudo iniciar la aplicación:",
+      "App could no be started:",
       error
     );
 
