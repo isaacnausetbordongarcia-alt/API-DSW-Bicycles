@@ -30,7 +30,7 @@ export class BicycleController {
 
       if (!bicycle) {
         res.status(404).json({
-          message: "Bicicleta no encontrada",
+          message: "Bicyle not found",
         });
 
         return;
@@ -38,6 +38,31 @@ export class BicycleController {
 
       res.json(bicycle);
 
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  static async getEagerlyById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const id = Number(req.params.id);
+
+      const bicycle = await BicycleService.findEagerlyById(id);
+
+      if (!bicycle) {
+        res.status(404).json({
+          message: "Bicycle not found",
+        });
+
+        return;
+
+      }
+      res.json(bicycle);
     } catch (error) {
       next(error);
     }
@@ -54,7 +79,7 @@ export class BicycleController {
 
       if (!brandId || !model || price === undefined) {
         res.status(400).json({
-          message: "brandId, model y price son obligatorios",
+          message: "brandId, model and price are mandatory",
         });
 
         return;
@@ -88,7 +113,7 @@ export class BicycleController {
 
       if (!bicycle) {
         res.status(404).json({
-          message: "Bicicleta no encontrada",
+          message: "Bicycle not found",
         });
 
         return;
@@ -119,7 +144,7 @@ export class BicycleController {
 
       if (!bicycle) {
         res.status(404).json({
-          message: "Bicicleta no encontrada",
+          message: "Bicycle not found",
         });
 
         return;
