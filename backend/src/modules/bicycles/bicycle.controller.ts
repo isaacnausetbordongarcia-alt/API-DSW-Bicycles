@@ -17,6 +17,23 @@ export class BicycleController {
     }
   }
 
+  static async getAllEagerlyByFrameMaterial(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const frameMaterial = String(req.params.frameMaterial);
+
+      const bicycles = await BicycleService.findAllEagerlyByFrameMaterial(frameMaterial);
+
+      res.json(bicycles);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
   static async getById(
     req: Request,
     res: Response,

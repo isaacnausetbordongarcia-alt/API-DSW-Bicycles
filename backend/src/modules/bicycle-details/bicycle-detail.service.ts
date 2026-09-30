@@ -1,39 +1,53 @@
-import { Brand } from "./details.model";
+import { BicycleDetail } from "./bicycle-detail.model";
+import { Bicycle } from "../bicycles/bicycle.model";
 
-export class BrandService {
+export class BicycleDetailService {
 
     static async findAll() {
-        return Brand.findAll({
+        return BicycleDetail.findAll({
             order: [["id", "ASC"]],
         });
     }
 
-
     static async findById(id: number) {
-        return Brand.findByPk(id);
+        return BicycleDetail.findByPk(id);
     }
 
+    static async findEagerlyById(id: number) {
+        return BicycleDetail.findByPk(id, {
+            include: [
+                {
+                    model: BicycleDetail,
+                    as: 'bicycleDetail'
+                }
+            ]
+        });
+    }
 
     static async create(data: {
-        brandId: number,
-        name: string;
+        bicycleId: number,
+        frameMaterial: "Aluminum" | "Carbon" | "Steel" | "Titanium";
+        wheelSize: number;
+        weight: number;
+        suspension?: string | null;
     }) {
-        return Brand.create(data);
+        return BicycleDetail.create(data);
     }
-
 
     static async update(
-        brand: Brand,
+        bicycleDetail: BicycleDetail,
         data: {
-            brandId: number,
-            name: string;
+            bicycleId: number,
+            frameMaterial: "Aluminum" | "Carbon" | "Steel" | "Titanium";
+            wheelSize: number;
+            weight: number;
+            suspension?: string | null;
         }
     ) {
-        return brand.update(data);
+        return bicycleDetail.update(data);
     }
 
-
-    static async delete(brand: Brand) {
-        await brand.destroy();
+    static async delete(bicycleDetail: BicycleDetail) {
+        await bicycleDetail.destroy();
     }
 }
