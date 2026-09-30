@@ -44,6 +44,31 @@ export class BicycleController {
   }
 
 
+  static async getEagerlyById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const id = Number(req.params.id);
+
+      const bicycle = await BicycleService.findEagerlyById(id);
+
+      if (!bicycle) {
+        res.status(404).json({
+          message: "Bicycle not found",
+        });
+
+        return;
+
+      }
+      res.json(bicycle);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
   static async create(
     req: Request,
     res: Response,
@@ -54,7 +79,11 @@ export class BicycleController {
 
       if (!brandId || !model || price === undefined) {
         res.status(400).json({
+<<<<<<< HEAD
           message: "brandId, model y price are mandatory",
+=======
+          message: "brandId, model and price are mandatory",
+>>>>>>> entrega_2
         });
 
         return;
