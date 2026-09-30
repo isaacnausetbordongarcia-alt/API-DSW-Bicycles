@@ -17,7 +17,6 @@ export class BicycleController {
     }
   }
 
-
   static async getById(
     req: Request,
     res: Response,
@@ -43,7 +42,6 @@ export class BicycleController {
     }
   }
 
-
   static async getEagerlyById(
     req: Request,
     res: Response,
@@ -68,24 +66,18 @@ export class BicycleController {
     }
   }
 
-
   static async create(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const { brandId, model, description, price, stock } = req.body;
+      const { brandId, model, description, details, price, stock } = req.body;
 
       if (!brandId || !model || price === undefined) {
         res.status(400).json({
-<<<<<<< HEAD
-          message: "brandId, model y price are mandatory",
-=======
           message: "brandId, model and price are mandatory",
->>>>>>> entrega_2
         });
-
         return;
       }
 
@@ -93,6 +85,7 @@ export class BicycleController {
         brandId,
         model,
         description,
+        details,
         price,
         stock,
       });
@@ -134,7 +127,6 @@ export class BicycleController {
       next(error);
     }
   }
-
 
   static async delete(
     req: Request,
