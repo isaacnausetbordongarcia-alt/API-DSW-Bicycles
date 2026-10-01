@@ -20,6 +20,8 @@ export class Bicycle extends Model<
 
   declare description: string | null;
 
+  declare details: string | null;
+
   declare price: number;
 
   declare stock: number;
@@ -52,6 +54,11 @@ Bicycle.init(
 
     description: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+
+    details: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
 

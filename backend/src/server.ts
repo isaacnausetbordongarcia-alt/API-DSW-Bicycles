@@ -6,6 +6,7 @@ import { defineAssociations } from "./models/associations";
 // Import from the two models so we can use them here.
 import "./modules/bicycles/bicycle.model";
 import "./modules/brands/brand.model";
+import "./modules/bicycle-details/bicycle-detail.model";
 
 async function startServer() {
   try {
