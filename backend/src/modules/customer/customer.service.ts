@@ -17,7 +17,7 @@ export class CustomerService {
 
   static async findCustomerWithOrdersByNameSearch(nameSearch: string){
     return Customer.findAll({
-      where: {name: { [Op.like]: `%{nameSearch}%`}},
+      where: {name: { [Op.like]: `%${nameSearch}%`}},
       include: [{ model: Order, as: "orders", required: true}]
     })
   }

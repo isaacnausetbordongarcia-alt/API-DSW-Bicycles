@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomerService } from "./customer.service";
-import { Next } from "mysql2/typings/mysql/lib/parsers/typeCast";
 
 export class CustomerController {
 
@@ -92,7 +91,7 @@ export class CustomerController {
 
       if (!email || !name === undefined) {
         res.status(400).json({
-          message: "brandId, model and price are mandatory",
+          message: "email and name are mandatory",
         });
         return;
       }
@@ -108,7 +107,6 @@ export class CustomerController {
       next(error);
     }
   }
-
 
   static async update(
     req: Request,

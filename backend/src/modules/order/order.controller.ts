@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { OrderService } from "./order.service";
-import { Next } from "mysql2/typings/mysql/lib/parsers/typeCast";
 
 export class OrderController {
 
@@ -92,7 +91,7 @@ export class OrderController {
 
       if (!customerId || !status === undefined) {
         res.status(400).json({
-          message: "brandId, model and price are mandatory",
+          message: "customerId and status are mandatory",
         });
         return;
       }
