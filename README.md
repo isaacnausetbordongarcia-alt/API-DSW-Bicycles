@@ -195,6 +195,8 @@ erDiagram
 
 Delivery 4 extends the API with two new resources, **customers** and **orders**, on top of the brands, bicycles and bicycle details from delivery 3. The frontend does not change: it still only manages bicycles.
 
+### Database model (delivery 4)
+
 The database now has five tables. The new ones are `customers` and `orders`; the relationships are declared in `backend/src/models/associations.ts`.
 
 ```mermaid
