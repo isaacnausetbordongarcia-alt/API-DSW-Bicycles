@@ -7,7 +7,7 @@ router.get("/", OrderItemController.getAll);
 
 router.get("/:id", OrderItemController.getById);
 
-router.get("/eagerly/:id", OrderItemController.getEagerlyById);
+router.get("/order/:orderId", OrderItemController.getByOrderId);
 
 router.post("/", OrderItemController.create);
 

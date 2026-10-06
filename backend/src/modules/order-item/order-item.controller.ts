@@ -17,6 +17,24 @@ export class OrderItemController {
     }
   }
 
+
+  static async getByOrderId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orderId = Number(req.params.orderId);
+      const result = await OrderItemService.findByOrderId(orderId);
+
+      if (result.items.length === 0) {
+        res.status(404).json({ message: "Order has no items or does not exist" });
+        return;
+      }
+
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
   static async getById(
     req: Request,
     res: Response,
@@ -41,32 +59,6 @@ export class OrderItemController {
       next(error);
     }
   }
-
-  static async getEagerlyById(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const id = Number(req.params.id);
-
-      const orderItem = await OrderItemService.findEagerlyById(id);
-
-      if (!orderItem) {
-        res.status(404).json({
-          message: "OrderItem not found",
-        });
-
-        return;
-
-      }
-      res.json(orderItem);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  
 
   static async create(
     req: Request,
