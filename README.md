@@ -153,6 +153,8 @@ The backend follows a **routes → controller → service → model** layering i
 
 ## Database model
 
+The database has three tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. The relationships are declared in `backend/src/models/associations.ts`.
+
 ```mermaid
 erDiagram
     BRANDS {
@@ -251,7 +253,9 @@ erDiagram
     CUSTOMERS ||--o{ ORDERS : "places"
 ```
 
-The database has six tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. All tables use an auto-incremental unsigned integer `id` as primary key and have `createdAt` / `updatedAt` timestamps.
+The database has six tables now, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. All tables use an auto-incremental unsigned integer `id` as primary key and have `createdAt` / `updatedAt` timestamps.
+
+## Delivery 5
 
 ```mermaid
 erDiagram
@@ -360,32 +364,14 @@ curl -X POST http://localhost:3000/api/bicycles \
 | `frontend/` | `npm run lint` | Runs oxlint |
 | `frontend/` | `npm run preview` | Serves the production build locally |
 
-## Database model
+## Known issues and notes
 
-The database has three tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. The relationships are declared in `backend/src/models/associations.ts`.
+- **`sequelize.sync({ force: true })` is used in `server.ts`.** Every time the backend starts, all tables are dropped and recreated, so **all data is lost on each restart**. Change it to `sync()` (or `sync({ alter: true })`) to keep your data.
+- The `order-items` router is not registered in `routes/index.ts`, so its endpoints are not reachable yet.
+- The `findEagerlyById` methods in the order, order-item and customer services include a model on itself (with aliases that are not defined in the associations), so the eager endpoints for those resources need to be fixed before they can be used.
+- The frontend `Bicycle` type (`brand: string`) does not match the backend model yet (`brandId`, `details`); the frontend will need adapting once it consumes brands.
+- Never commit real credentials: use `.env.example` as a template and keep `.env` out of version control.
 
-
-
-Notes on the new tables:
-
-- The physical table names are `customers` and `orders`.
-- `customers.name` and `customers.email` are both unique.
-- `orders.status` accepts `pending` (default), `paid`, `shipped` and `cancelled`; `orders.orderDate` defaults to the current date and time.
-- `orders` is only related to `customers`. An order does not reference any bicycle yet, so it has no order lines.
-
-### New endpoints
-
-All of them are mounted under `/api`, like the existing ones.
-
-| Resource | Base path | Endpoints |
-| --- | --- | --- |
-| Customers | `/customers` | `GET /`, `GET /:name_search/orders`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id` |
-| Orders | `/orders` | `GET /`, `GET /customers/:id`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id` |
-
-- `GET /api/customers/:name_search/orders` searches customers whose name contains the given text (`LIKE %text%`) and returns each one with its `orders`. It uses an inner join, so only customers with at least one order are returned.
-- `GET /api/orders/customers/:id` returns the orders of one customer, newest first (`orderDate` descending), including the customer's `id`, `name` and `email`.
-- Creating a customer requires `email` and `name`. Creating an order requires `customerId` and `status`.
-- A missing record returns `404` with `Customer not found` or `Order not found`, and a successful `DELETE` returns `204`.
 
 ## Recommended links
 
