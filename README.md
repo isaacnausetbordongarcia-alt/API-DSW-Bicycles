@@ -233,27 +233,6 @@ All of them are mounted under `/api`, like the existing ones.
 - Creating a customer requires `email` and `name`. Creating an order requires `customerId` and `status`.
 - A missing record returns `404` with `Customer not found` or `Order not found`, and a successful `DELETE` returns `204`.
 
-Example requests:
-
-```http
-POST /api/customers
-Content-Type: application/json
-
-{ "name": "Juan", "email": "juan@gmail.com" }
-```
-
-```http
-POST /api/orders
-Content-Type: application/json
-
-{ "customerId": 1, "status": "pending" }
-```
-
-```http
-GET /api/customers/jua/orders
-GET /api/orders/customers/1
-```
-
 ## Recommended links
 
 - [Express documentation](https://expressjs.com/) — routing, middleware, and backend APIs.
