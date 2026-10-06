@@ -153,6 +153,104 @@ The backend follows a **routes → controller → service → model** layering i
 
 ## Database model
 
+```mermaid
+erDiagram
+    BRANDS {
+        int_unsigned id PK
+        varchar_150 name
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLES {
+        int_unsigned id PK
+        int_unsigned brandId FK
+        varchar_150 model
+        text description "nullable"
+        varchar_255 details "nullable"
+        decimal_10_2 price
+        int_unsigned stock "default 0"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLE_DETAILS {
+        int_unsigned id PK
+        int_unsigned bicycleId FK
+        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
+        decimal_4_1 wheelSize
+        decimal_5_2 weight
+        varchar_80 suspension "nullable"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
+    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
+```
+
+## Delivery 4: Customers and Orders
+
+Delivery 4 extends the API with two new resources, **customers** and **orders**, on top of the brands, bicycles and bicycle details from delivery 3. The frontend does not change: it still only manages bicycles.
+
+### Database model (delivery 4)
+
+The database now has five tables. The new ones are `customers` and `orders`; the relationships are declared in `backend/src/models/associations.ts`.
+
+```mermaid
+erDiagram
+    BRANDS {
+        int_unsigned id PK
+        varchar_150 name
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLES {
+        int_unsigned id PK
+        int_unsigned brandId FK
+        varchar_150 model
+        text description "nullable"
+        varchar_255 details "nullable"
+        decimal_10_2 price
+        int_unsigned stock "default 0"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLE_DETAILS {
+        int_unsigned id PK
+        int_unsigned bicycleId FK
+        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
+        decimal_4_1 wheelSize
+        decimal_5_2 weight
+        varchar_80 suspension "nullable"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    CUSTOMERS {
+        int_unsigned id PK
+        varchar_100 name UK
+        varchar_160 email UK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    ORDERS {
+        int_unsigned id PK
+        int_unsigned customerId FK
+        datetime orderDate "default NOW"
+        enum status "pending, paid, shipped, cancelled (default pending)"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
+    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
+    CUSTOMERS ||--o{ ORDERS : "places"
+```
+
 The database has six tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. All tables use an auto-incremental unsigned integer `id` as primary key and have `createdAt` / `updatedAt` timestamps.
 
 ```mermaid
@@ -262,115 +360,11 @@ curl -X POST http://localhost:3000/api/bicycles \
 | `frontend/` | `npm run lint` | Runs oxlint |
 | `frontend/` | `npm run preview` | Serves the production build locally |
 
-## Known issues and notes
-
-- **`sequelize.sync({ force: true })` is used in `server.ts`.** Every time the backend starts, all tables are dropped and recreated, so **all data is lost on each restart**. Change it to `sync()` (or `sync({ alter: true })`) to keep your data.
-- The `order-items` router is not registered in `routes/index.ts`, so its endpoints are not reachable yet.
-- The `findEagerlyById` methods in the order, order-item and customer services include a model on itself (with aliases that are not defined in the associations), so the eager endpoints for those resources need to be fixed before they can be used.
-- The frontend `Bicycle` type (`brand: string`) does not match the backend model yet (`brandId`, `details`); the frontend will need adapting once it consumes brands.
-- Never commit real credentials: use `.env.example` as a template and keep `.env` out of version control.
-
 ## Database model
 
 The database has three tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. The relationships are declared in `backend/src/models/associations.ts`.
 
-```mermaid
-erDiagram
-    BRANDS {
-        int_unsigned id PK
-        varchar_150 name
-        datetime createdAt
-        datetime updatedAt
-    }
 
-    BICYCLES {
-        int_unsigned id PK
-        int_unsigned brandId FK
-        varchar_150 model
-        text description "nullable"
-        varchar_255 details "nullable"
-        decimal_10_2 price
-        int_unsigned stock "default 0"
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    BICYCLE_DETAILS {
-        int_unsigned id PK
-        int_unsigned bicycleId FK
-        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
-        decimal_4_1 wheelSize
-        decimal_5_2 weight
-        varchar_80 suspension "nullable"
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
-    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
-```
-
-## Delivery 4: Customers and Orders
-
-Delivery 4 extends the API with two new resources, **customers** and **orders**, on top of the brands, bicycles and bicycle details from delivery 3. The frontend does not change: it still only manages bicycles.
-
-### Database model (delivery 4)
-
-The database now has five tables. The new ones are `customers` and `orders`; the relationships are declared in `backend/src/models/associations.ts`.
-
-```mermaid
-erDiagram
-    BRANDS {
-        int_unsigned id PK
-        varchar_150 name
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    BICYCLES {
-        int_unsigned id PK
-        int_unsigned brandId FK
-        varchar_150 model
-        text description "nullable"
-        varchar_255 details "nullable"
-        decimal_10_2 price
-        int_unsigned stock "default 0"
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    BICYCLE_DETAILS {
-        int_unsigned id PK
-        int_unsigned bicycleId FK
-        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
-        decimal_4_1 wheelSize
-        decimal_5_2 weight
-        varchar_80 suspension "nullable"
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    CUSTOMERS {
-        int_unsigned id PK
-        varchar_100 name UK
-        varchar_160 email UK
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    ORDERS {
-        int_unsigned id PK
-        int_unsigned customerId FK
-        datetime orderDate "default NOW"
-        enum status "pending, paid, shipped, cancelled (default pending)"
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
-    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
-    CUSTOMERS ||--o{ ORDERS : "places"
-```
 
 Notes on the new tables:
 
