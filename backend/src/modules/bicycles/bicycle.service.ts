@@ -46,7 +46,6 @@ export class BicycleService {
     brandId: number;
     model: string;
     description?: string | null;
-    details?: string | null;
     price: number;
     stock: number;
   }) {
@@ -60,7 +59,6 @@ export class BicycleService {
       brandId?: number;
       model?: string;
       description?: string | null;
-      details?: string | null;
       price?: number;
       stock?: number;
     }

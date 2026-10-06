@@ -89,7 +89,7 @@ export class BicycleController {
     next: NextFunction
   ) {
     try {
-      const { brandId, model, description, details, price, stock } = req.body;
+      const { brandId, model, description, price, stock } = req.body;
 
       if (!brandId || !model || price === undefined) {
         res.status(400).json({
@@ -102,7 +102,6 @@ export class BicycleController {
         brandId,
         model,
         description,
-        details,
         price,
         stock,
       });
