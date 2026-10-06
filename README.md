@@ -110,6 +110,46 @@ npm run dev
 
 Open the local URL printed by Vite, usually [http://localhost:5173](http://localhost:5173). The frontend sends API requests to the URL configured in `frontend/.env`.
 
+## Database model
+
+The database has three tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. The relationships are declared in `backend/src/models/associations.ts`.
+
+```mermaid
+erDiagram
+    BRANDS {
+        int_unsigned id PK
+        varchar_150 name
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLES {
+        int_unsigned id PK
+        int_unsigned brandId FK
+        varchar_150 model
+        text description "nullable"
+        varchar_255 details "nullable"
+        decimal_10_2 price
+        int_unsigned stock "default 0"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLE_DETAILS {
+        int_unsigned id PK
+        int_unsigned bicycleId FK
+        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
+        decimal_4_1 wheelSize
+        decimal_5_2 weight
+        varchar_80 suspension "nullable"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
+    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
+```
+
 ## Recommended links
 
 - [Express documentation](https://expressjs.com/) — routing, middleware, and backend APIs.
