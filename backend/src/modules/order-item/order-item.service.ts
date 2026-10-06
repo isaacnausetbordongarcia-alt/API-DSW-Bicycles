@@ -31,7 +31,6 @@ export class OrderItemService {
       order: [["id", "ASC"]],
     });
 
-    // DECIMAL llega como string desde MySQL, por eso el Number()
     const total = items.reduce(
       (sum, item) => sum + item.quantity * Number(item.unitPrice),
       0
