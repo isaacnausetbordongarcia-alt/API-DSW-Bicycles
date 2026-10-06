@@ -270,6 +270,129 @@ curl -X POST http://localhost:3000/api/bicycles \
 - The frontend `Bicycle` type (`brand: string`) does not match the backend model yet (`brandId`, `details`); the frontend will need adapting once it consumes brands.
 - Never commit real credentials: use `.env.example` as a template and keep `.env` out of version control.
 
+## Database model
+
+The database has three tables, created by Sequelize from the models in `backend/src/modules/*/*.model.ts`. The relationships are declared in `backend/src/models/associations.ts`.
+
+```mermaid
+erDiagram
+    BRANDS {
+        int_unsigned id PK
+        varchar_150 name
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLES {
+        int_unsigned id PK
+        int_unsigned brandId FK
+        varchar_150 model
+        text description "nullable"
+        varchar_255 details "nullable"
+        decimal_10_2 price
+        int_unsigned stock "default 0"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLE_DETAILS {
+        int_unsigned id PK
+        int_unsigned bicycleId FK
+        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
+        decimal_4_1 wheelSize
+        decimal_5_2 weight
+        varchar_80 suspension "nullable"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
+    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
+```
+
+## Delivery 4: Customers and Orders
+
+Delivery 4 extends the API with two new resources, **customers** and **orders**, on top of the brands, bicycles and bicycle details from delivery 3. The frontend does not change: it still only manages bicycles.
+
+### Database model (delivery 4)
+
+The database now has five tables. The new ones are `customers` and `orders`; the relationships are declared in `backend/src/models/associations.ts`.
+
+```mermaid
+erDiagram
+    BRANDS {
+        int_unsigned id PK
+        varchar_150 name
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLES {
+        int_unsigned id PK
+        int_unsigned brandId FK
+        varchar_150 model
+        text description "nullable"
+        varchar_255 details "nullable"
+        decimal_10_2 price
+        int_unsigned stock "default 0"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BICYCLE_DETAILS {
+        int_unsigned id PK
+        int_unsigned bicycleId FK
+        enum frameMaterial "Aluminum, Carbon, Steel, Titanium"
+        decimal_4_1 wheelSize
+        decimal_5_2 weight
+        varchar_80 suspension "nullable"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    CUSTOMERS {
+        int_unsigned id PK
+        varchar_100 name UK
+        varchar_160 email UK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    ORDERS {
+        int_unsigned id PK
+        int_unsigned customerId FK
+        datetime orderDate "default NOW"
+        enum status "pending, paid, shipped, cancelled (default pending)"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    BRANDS ||--o{ BICYCLES : "has many (ON DELETE RESTRICT)"
+    BICYCLES ||--o| BICYCLE_DETAILS : "has one (ON DELETE CASCADE)"
+    CUSTOMERS ||--o{ ORDERS : "places"
+```
+
+Notes on the new tables:
+
+- The physical table names are `customers` and `orders`.
+- `customers.name` and `customers.email` are both unique.
+- `orders.status` accepts `pending` (default), `paid`, `shipped` and `cancelled`; `orders.orderDate` defaults to the current date and time.
+- `orders` is only related to `customers`. An order does not reference any bicycle yet, so it has no order lines.
+
+### New endpoints
+
+All of them are mounted under `/api`, like the existing ones.
+
+| Resource | Base path | Endpoints |
+| --- | --- | --- |
+| Customers | `/customers` | `GET /`, `GET /:name_search/orders`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id` |
+| Orders | `/orders` | `GET /`, `GET /customers/:id`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id` |
+
+- `GET /api/customers/:name_search/orders` searches customers whose name contains the given text (`LIKE %text%`) and returns each one with its `orders`. It uses an inner join, so only customers with at least one order are returned.
+- `GET /api/orders/customers/:id` returns the orders of one customer, newest first (`orderDate` descending), including the customer's `id`, `name` and `email`.
+- Creating a customer requires `email` and `name`. Creating an order requires `customerId` and `status`.
+- A missing record returns `404` with `Customer not found` or `Order not found`, and a successful `DELETE` returns `204`.
+
 ## Recommended links
 
 - [Express documentation](https://expressjs.com/) — routing, middleware, and backend APIs.
