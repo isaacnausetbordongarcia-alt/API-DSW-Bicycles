@@ -30,7 +30,7 @@ export class OrderItemService {
       ],
       order: [["id", "ASC"]],
     });
-
+ 
     const total = items.reduce(
       (sum, item) => sum + item.quantity * Number(item.unitPrice),
       0
