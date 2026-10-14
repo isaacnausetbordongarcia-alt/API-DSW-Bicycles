@@ -1,6 +1,7 @@
-import { BicycleDetail } from "../bicycle-details/bicycle-detail.model";
-import { Brand } from "../brands/brand.model";
-import { Bicycle } from "./bicycle.model";
+import { BicycleDetail } from "../bicycle-details/bicycle-detail.model.js";
+import { Brand } from "../brands/brand.model.js";
+import { Bicycle } from "./bicycle.model.js";
+import { Model } from "../models/model.model.js";
 
 export class BicycleService {
 
@@ -36,15 +37,26 @@ export class BicycleService {
         {
           model: Brand,
           as: 'brand'
+        },
+
+        {
+          model: Model,
+          as: 'model'
         }
       ]
     });
   }
 
+  static async findGreaterPrice(id:number){
+    return Bicycle.findByPk{
+      
+    }
+  }
+
 
   static async create(data: {
     brandId: number;
-    model: string;
+    modelId: number;
     description?: string | null;
     price: number;
     stock: number;
@@ -57,7 +69,7 @@ export class BicycleService {
     bicycle: Bicycle,
     data: {
       brandId?: number;
-      model?: string;
+      modelId?: number;
       description?: string | null;
       price?: number;
       stock?: number;

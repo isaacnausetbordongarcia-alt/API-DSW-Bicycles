@@ -1,9 +1,10 @@
-import { Bicycle } from "../modules/bicycles/bicycle.model";
-import { Brand } from "../modules/brands/brand.model";
-import { BicycleDetail } from "../modules/bicycle-details/bicycle-detail.model";
-import { Customer } from "../modules/customer/customer.model";
-import { Order } from "../modules/order/order.model";
-import { OrderItem } from "../modules/order-item/order-item.model";
+import { Bicycle } from "../modules/bicycles/bicycle.model.js";
+import { Brand } from "../modules/brands/brand.model.js";
+import { BicycleDetail } from "../modules/bicycle-details/bicycle-detail.model.js";
+import { Customer } from "../modules/customer/customer.model.js";
+import { Order } from "../modules/order/order.model.js";
+import { OrderItem } from "../modules/order-item/order-item.model.js";
+import { Model } from "../modules/models/model.model.js";
 
 
 export function defineAssociations() {
@@ -19,4 +20,6 @@ export function defineAssociations() {
     OrderItem.belongsTo(Bicycle, {foreignKey: "bicycleId", as: "bicycle"});
     Order.belongsToMany(Bicycle, {through: OrderItem, foreignKey: "orderId", otherKey: "bicycleId", as: "bicycles",});
     Bicycle.belongsToMany(Order, {through: OrderItem, foreignKey: "bicycleId", otherKey: "orderId", as: "orders",});
+    Model.hasMany(Bicycle, {foreignKey: "modelId", as: "bicycles"});
+    Bicycle.belongsTo(Model, {foreignKey: "modelId", as: "model"});
 }

@@ -4,12 +4,13 @@ import { env } from "./config/env";
 import { defineAssociations } from "./models/associations";
 
 // Import from the two models so we can use them here.
-import "./modules/bicycles/bicycle.model";
-import "./modules/brands/brand.model";
-import "./modules/bicycle-details/bicycle-detail.model";
-import "./modules/customer/customer.model";
-import "./modules/order/order.model";
-import "./modules/order-item/order-item.model"
+import "./modules/bicycles/bicycle.model.js"
+import "./modules/brands/brand.model.js"
+import "./modules/bicycle-details/bicycle-detail.model.js"
+import "./modules/customer/customer.model.js"
+import "./modules/order/order.model.js"
+import "./modules/order-item/order-item.model.js"
+import "./modules/models/model.model.js"
 
 async function startServer() {
   try {
