@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { BicycleService } from "./bicycle.service";
+import { BicycleService } from "./bicycle.service.js";
 
 export class BicycleController {
 
@@ -53,6 +53,21 @@ export class BicycleController {
       }
 
       res.json(bicycle);
+
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getGreaterPrice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const bicycles = await BicycleService.findGreaterPrice(100);
+
+      res.json(bicycles);
 
     } catch (error) {
       next(error);

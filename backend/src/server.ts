@@ -1,7 +1,7 @@
-import { app } from "./app";
-import { sequelize } from "./config/database";
-import { env } from "./config/env";
-import { defineAssociations } from "./models/associations";
+import { app } from "./app.js";
+import { sequelize } from "./config/database.js";
+import { env } from "./config/env.js";
+import { defineAssociations } from "./models/associations.js";
 
 // Import from the two models so we can use them here.
 import "./modules/bicycles/bicycle.model.js"

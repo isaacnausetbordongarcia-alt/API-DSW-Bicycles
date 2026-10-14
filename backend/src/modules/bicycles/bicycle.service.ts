@@ -2,6 +2,7 @@ import { BicycleDetail } from "../bicycle-details/bicycle-detail.model.js";
 import { Brand } from "../brands/brand.model.js";
 import { Bicycle } from "./bicycle.model.js";
 import { Model } from "../models/model.model.js";
+import { Op } from "sequelize";
 
 export class BicycleService {
 
@@ -20,11 +21,11 @@ export class BicycleService {
     return Bicycle.findAll({
       include: [
         {
-         model: BicycleDetail,
-         as: 'detail',
-         where: {
+          model: BicycleDetail,
+          as: 'detail',
+          where: {
             frameMaterial
-         }
+          }
         }
       ],
       order: [["id", "ASC"]],
@@ -47,11 +48,17 @@ export class BicycleService {
     });
   }
 
-  static async findGreaterPrice(id:number){
-    return Bicycle.findByPk{
-      
-    }
+  static async findGreaterPrice(price: number) {
+    return Bicycle.findAll({
+      where: {
+        price: { [Op.gt]: price },
+      },
+      order: [["id", "ASC"]],
+    });
   }
+
+
+
 
 
   static async create(data: {
