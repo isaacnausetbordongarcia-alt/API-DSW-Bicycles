@@ -6,7 +6,7 @@ import {
   CreationOptional,
 } from "sequelize";
 
-import { sequelize } from "../../config/database";
+import { sequelize } from "../../config/database.js";
 
 export class Bicycle extends Model<
   InferAttributes<Bicycle>,
@@ -16,7 +16,7 @@ export class Bicycle extends Model<
 
   declare brandId: number;
 
-  declare model: string;
+  declare modelId: number;
 
   declare description: string | null;
 
@@ -45,8 +45,8 @@ Bicycle.init(
       onDelete: "RESTRICT",
     },
 
-    model: {
-      type: DataTypes.STRING(150),
+    modelId: {
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
 

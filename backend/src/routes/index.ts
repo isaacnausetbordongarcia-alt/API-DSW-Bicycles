@@ -5,6 +5,7 @@ import bicycleDetailRoutes from "../modules/bicycle-details/bicycle-detail.route
 import customerRoutes from "../modules/customer/customer.routes";
 import orderRoutes from "../modules/order/order.routes";
 import orderItemRoutes from "../modules/order-item/order-item.routes";
+import modelRoutes from "../modules/models/model.routes"
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/bicycle-details", bicycleDetailRoutes);
 router.use("/customers", customerRoutes);
 router.use("/orders", orderRoutes);
 router.use("/order-item", orderItemRoutes);
+router.use("/models", modelRoutes)
 
 export default router;
