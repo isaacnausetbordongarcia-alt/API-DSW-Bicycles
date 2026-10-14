@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { OrderService } from "./order.service";
+import { OrderService } from "./order.service.js";
 
 export class OrderController {
 
@@ -12,6 +12,21 @@ export class OrderController {
       const orders = await OrderService.findAll();
 
       res.json(orders);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getByBicycleCondition(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const orders = await OrderService.findByBicycleCondition();
+
+      res.json(orders);
+
     } catch (error) {
       next(error);
     }
@@ -70,14 +85,14 @@ export class OrderController {
     req: Request,
     res: Response,
     next: NextFunction
-  ){
-    try{
-        const customerId = Number(req.params.id);
-        const orders = await OrderService.findByCustomerId(customerId);
+  ) {
+    try {
+      const customerId = Number(req.params.id);
+      const orders = await OrderService.findByCustomerId(customerId);
 
-        res.json(orders);
-    } catch (error){
-        next (error);
+      res.json(orders);
+    } catch (error) {
+      next(error);
     }
   }
 

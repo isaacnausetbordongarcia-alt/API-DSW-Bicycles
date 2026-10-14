@@ -6,7 +6,7 @@ import {
     CreationOptional,
 } from "sequelize";
 
-import { sequelize } from "../../config/database";
+import { sequelize } from "../../config/database.js";
 
 export class BicycleDetail extends Model<
     InferAttributes<BicycleDetail>,

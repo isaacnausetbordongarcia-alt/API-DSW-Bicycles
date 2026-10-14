@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { OrderController } from "./order.controller";
+import { OrderController } from "./order.controller.js";
 
 const router = Router();
 
 router.get("/", OrderController.getAll);
 
 router.get("/customers/:id", OrderController.getByCustomerId);
+
+router.get("/bicycle-condition", OrderController.getByBicycleCondition);
 
 router.get("/:id", OrderController.getById);
 

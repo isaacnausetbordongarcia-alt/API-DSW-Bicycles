@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { BicycleService } from "./bicycle.service";
+import { BicycleService } from "./bicycle.service.js";
 
 export class BicycleController {
 
@@ -59,6 +59,21 @@ export class BicycleController {
     }
   }
 
+  static async getGreaterPrice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const bicycles = await BicycleService.findGreaterPrice(100);
+
+      res.json(bicycles);
+
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getEagerlyById(
     req: Request,
     res: Response,
@@ -89,9 +104,9 @@ export class BicycleController {
     next: NextFunction
   ) {
     try {
-      const { brandId, model, description, price, stock } = req.body;
+      const { brandId, modelId, description, price, stock } = req.body;
 
-      if (!brandId || !model || price === undefined) {
+      if (!brandId || !modelId || price === undefined) {
         res.status(400).json({
           message: "brandId, model and price are mandatory",
         });
@@ -100,7 +115,7 @@ export class BicycleController {
 
       const bicycle = await BicycleService.create({
         brandId,
-        model,
+        modelId,
         description,
         price,
         stock,
